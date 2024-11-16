@@ -10,4 +10,6 @@ void internal_clock();
 
 int main(){
     internal_clock();
+    keypad();
+
 }
