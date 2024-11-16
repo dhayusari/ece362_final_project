@@ -56,6 +56,7 @@ void update_history(int c, int rows)
     }
 }
 
+
 void drive_column(int c)
 {
     GPIOC->BSRR = 0xf00000 | ~(1 << (c + 4));
