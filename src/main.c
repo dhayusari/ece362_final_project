@@ -10,11 +10,8 @@ void oled_main();
 
 int main(){
     internal_clock();
-<<<<<<< HEAD
     keypad();
 
-=======
 
     oled_main();
->>>>>>> 61c682585c26b229753f51ea1ffe513ea8fb6b11
 }
