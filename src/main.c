@@ -6,8 +6,10 @@
 void internal_clock();
 // void enable_sensor_ports();
 // void enable_keypad_ports();
-// void oled_main();
+void oled_main();
 
 int main(){
     internal_clock();
+
+    oled_main();
 }
