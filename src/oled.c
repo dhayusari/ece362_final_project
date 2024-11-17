@@ -162,7 +162,6 @@ void clear_display(void) {
 
 int oled_main(void) {
     internal_clock();
-    enable_ports_oled();
     init_tim7();
     init_spi1();
     spi1_init_oled();
