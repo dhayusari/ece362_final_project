@@ -2,13 +2,13 @@
 
 #include "stm32f0xx.h"
 #include <stdint.h>
+#include "oled.h"
+#include "keypad.h"
 
 void internal_clock();
 void enable_sensor_ports();
 void enable_ports_oled();
 void enable_alarm_ports();
-void enable_keypad_ports();
-void oled_main();
 
 int main(){
     internal_clock();

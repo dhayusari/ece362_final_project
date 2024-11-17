@@ -1,7 +1,9 @@
 // ALARM FUNCTIONS
 #include "stm32f0xx.h"
+#include "oled.h"
 
 void enable_alarm_ports();
+void nano_wait(unsigned int n);
 void alarm(void);
 
 void enable_alarm_ports(){
@@ -11,6 +13,7 @@ void enable_alarm_ports(){
     GPIOA -> MODER &= ~(GPIO_MODER_MODER3);
     GPIOA -> MODER |= GPIO_MODER_MODER3_0; // PA3 as output
 }
+
 void alarm(void){
     clear_display();
     spi1_display1("ALARMMM");
