@@ -46,7 +46,7 @@ char pop_queue() {
 
 void update_history(int c, int rows)
 {
-    // We used to make students do this in assembly language.
+    //updating history bytes
     for(int i = 0; i < 4; i++) {
         hist[4*c+i] = (hist[4*c+i]<<1) + ((rows>>i)&1);
         if (hist[4*c+i] == 0x01)

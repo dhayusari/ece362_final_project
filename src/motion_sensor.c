@@ -21,8 +21,8 @@ void enable_sensor_ports(){
     RCC -> AHBENR |= RCC_AHBENR_GPIOAEN;
 
     //PA6 for output & PA0 for input; PA3 is output (buzzer)
-    GPIOA -> MODER &= ~(GPIO_MODER_MODER6 | GPIO_MODER_MODER0 | GPIO_MODER_MODER3);
-    GPIOA -> MODER |= GPIO_MODER_MODER6_0 | GPIO_MODER_MODER3_0;
+    GPIOA -> MODER &= ~(GPIO_MODER_MODER6 | GPIO_MODER_MODER0);
+    GPIOA -> MODER |= GPIO_MODER_MODER6_0; // | GPIO_MODER_MODER3_0;
     GPIOA -> PUPDR |= GPIO_PUPDR_PUPDR0_1; // pull down resistor added
 }
 void enable_sensor(){
