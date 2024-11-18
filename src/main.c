@@ -10,6 +10,7 @@ void enable_sensor_ports();
 void enable_ports_oled();
 void enable_alarm_ports();
 void enable_keypad_ports();
+char get_keypress();
 void enable_sensor();
 int oled_checkpasscode();
 void init_tim6();
@@ -17,6 +18,7 @@ void alarm();
 void clear_display();
 void spi1_display1(const char *string);
 void read_motion();
+void disable_sensor();
 
 
 int main(){
@@ -28,6 +30,7 @@ int main(){
     enable_ports_oled();
     // keypad();
 
+    //char key = get_keypress();
     // functionality of the system
     int password = oled_checkpasscode();
     if (password) {
@@ -35,8 +38,18 @@ int main(){
         init_tim6();
         clear_display();
         spi1_display1("Detecting Motion");
-    }
-    if (password == 0) {
+        char key = get_keypress();
+        if (key == 'A') {
+            password = oled_checkpasscode();
+            if (password) {
+                disable_sensor();
+                clear_display();
+                spi1_display1("Disabled Sensor");
+            } else {
+                alarm();
+            }
+        }
+    } else {
         alarm();
     }
 

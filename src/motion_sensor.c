@@ -42,22 +42,28 @@ void disable_sensor(){
 
 void read_motion() {
     if (hist >= 0x01){ //0x00000001
-        motion_cnt++;
-    }
-    if (hist <= 0xfe) { // 0x11111110
-        no_motion_ct++;
-    }
-    
-    if (motion_cnt >= 7) {
+        // motion_cnt++;
         alarm();
         clear_display();
         spi1_display1("Motion Detected"); //when motion is detected display on OLED
         motion_cnt = 0; // resets motion counter
     }
-    else {
-        GPIOA -> BSRR |= GPIO_BSRR_BR_3;
-        no_motion_ct = 0;
+    if (hist <= 0xfe) { // 0x11111110
+        clear_display();
+        spi1_display1("No Motion Detected"); //when motion is detected display on OLED
+        no_motion_ct++;
     }
+    
+    // if (motion_cnt >= 7) {
+    //     alarm();
+    //     clear_display();
+    //     spi1_display1("Motion Detected"); //when motion is detected display on OLED
+    //     motion_cnt = 0; // resets motion counter
+    // }
+    // else {
+    //     GPIOA -> BSRR |= GPIO_BSRR_BR_3;
+    //     no_motion_ct = 0;
+    // }
 }
 
 void update_hist_sensor(){
