@@ -28,6 +28,7 @@ int main(){
     enable_keypad_ports();
     enable_alarm_ports();
     enable_ports_oled();
+    
     // keypad();
 
     //char key = get_keypress();

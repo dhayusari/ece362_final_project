@@ -8,6 +8,7 @@ void white_pulse(void);
 void red_flash(curr_state);
 void green(void);
 void green_flash(void);
+void led_main();
 
 void setup_tim1(void) {
     //We are using PA 8-10
@@ -98,7 +99,7 @@ void green_flash(void)
     green(); //After 15 seconds, light will become solid state of green to show security system is now set
 }
 
-int main(void) {
+void led_main() {
     setup_tim1();
 
     int system_state = 0; //system_state at 0 means security is off
