@@ -11,6 +11,11 @@ void update_hist_sensor();
 void init_tim6();
 void TIM6_DAC_IRQHandler();
 
+//other functions needed
+void alarm();
+void clear_display();
+void spi1_display1(const char *string);
+
 //global variables
 uint8_t hist; // 8 sample bits of input
 int motion_cnt = 0;
@@ -44,7 +49,9 @@ void read_motion() {
     }
     
     if (motion_cnt >= 7) {
-        GPIOA -> BSRR |= GPIO_BSRR_BS_3; // pretend this is alarm function
+        alarm();
+        clear_display();
+        spi1_display1("Motion Detected"); //when motion is detected display on OLED
         motion_cnt = 0; // resets motion counter
     }
     else {
@@ -72,5 +79,3 @@ void init_tim6(void) {
     NVIC -> ISER[0] = 1 << TIM6_DAC_IRQn;
     TIM6 -> CR1 |= TIM_CR1_CEN;
 }
-
-//when motion is detected display on OLED
