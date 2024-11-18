@@ -6,6 +6,9 @@
 //LED corresponding w different steps
 
 #include "stm32f0xx.h"
+#include "oled.h"
+#include "keypad.h"
+#include <string.h>
 
 uint8_t col; // the column being scanned
 uint8_t hist[16];
@@ -14,22 +17,9 @@ uint16_t msg[8] = { 0x0000,0x0100,0x0200,0x0300,0x0400,0x0500,0x0600,0x0700 };
 extern const char font[];
 
 void internal_clock();
+void alarm(void);
 
-void enable_ports_oled();
-void init_tim7();
-void TIM7_IRQHandler();
-void init_spi1();
-void spi_cmd(unsigned int data);
-void spi_data(unsigned int data);
-void spi1_init_oled();
-void spi1_display1(const char *string);
-void spi1_display2(const char *string);
-void append_digit(char digit);
-int check_passcode();
-void reset_passcode_entry();
-void clear_display();
-int oled_main();
-
+void oled_main_startingmsg(void)
 
 void enable_ports_oled(void) {
     // Only enable port C for the keypad
@@ -160,11 +150,22 @@ void clear_display(void) {
     nano_wait(2000000); // Wait for the clear command to complete
 }
 
-int oled_main(void) {
+void oled_main_startingmsg(void){
+    //call this function when system_init button is pressed
+    clear_display();
+    spi1_display1("Welcome");
+    nano_wait(2000000);
+    clear_display();
+    spi1_display1("Play Game To");
+    spi1_display2("Get Passcode");
+}
+
+void oled_main_checkpasscode(void) {
     internal_clock();
     init_tim7();
     init_spi1();
     spi1_init_oled();
+    clear_display();
     spi1_display1("Enter passcode:");
 
     int attempts = 0; //counter

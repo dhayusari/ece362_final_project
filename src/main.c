@@ -2,6 +2,8 @@
 
 #include "stm32f0xx.h"
 #include <stdint.h>
+#include "oled.h"
+#include "keypad.h"
 
 void internal_clock();
 void enable_sensor_ports();
