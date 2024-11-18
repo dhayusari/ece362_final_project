@@ -12,6 +12,12 @@ void enable_alarm_ports();
 void enable_keypad_ports();
 void enable_sensor();
 int oled_checkpasscode();
+void init_tim6();
+void alarm();
+void clear_display();
+void spi1_display1(const char *string);
+void read_motion();
+
 
 int main(){
     internal_clock();
@@ -27,6 +33,8 @@ int main(){
     if (password) {
         enable_sensor();
         init_tim6();
+        clear_display();
+        spi1_display1("Detecting Motion");
     }
     if (password == 0) {
         alarm();

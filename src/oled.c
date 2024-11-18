@@ -196,5 +196,5 @@ int oled_checkpasscode(void) {
        // alarm();
        return 0;
     }
-    
+    return 0;
 }
