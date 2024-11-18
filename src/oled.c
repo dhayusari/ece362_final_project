@@ -19,6 +19,8 @@ extern const char font[];
 void internal_clock();
 void alarm(void);
 
+void oled_main_startingmsg(void)
+
 void enable_ports_oled(void) {
     // Only enable port C for the keypad
     RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
@@ -148,11 +150,22 @@ void clear_display(void) {
     nano_wait(2000000); // Wait for the clear command to complete
 }
 
-void oled_main(void) {
+void oled_main_startingmsg(void){
+    //call this function when system_init button is pressed
+    clear_display();
+    spi1_display1("Welcome");
+    nano_wait(2000000);
+    clear_display();
+    spi1_display1("Play Game To");
+    spi1_display2("Get Passcode");
+}
+
+void oled_main_checkpasscode(void) {
     internal_clock();
     init_tim7();
     init_spi1();
     spi1_init_oled();
+    clear_display();
     spi1_display1("Enter passcode:");
 
     int attempts = 0; //counter

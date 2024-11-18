@@ -20,5 +20,5 @@ int main(){
     // keypad();
 
     // functionality of the system
-    oled_main();
+    oled_main_checkpasscode();
 }
