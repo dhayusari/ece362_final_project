@@ -179,7 +179,7 @@ int oled_main(void) {
         }
         else if (key == '#'){
             if (check_passcode()){
-                break;
+                return 1;
             }
             else{
                 clear_display();
@@ -192,6 +192,8 @@ int oled_main(void) {
         }
     }
     if (attempts == MAX_ATTEMPTS){
-        alarm();
+       // alarm();
+       return 0;
     }
+    
 }

@@ -2,6 +2,8 @@
 #include "stm32f0xx.h"
 
 void enable_alarm_ports();
+void clear_display();
+void spi1_display1(const char *string);
 void alarm(void);
 
 void enable_alarm_ports(){
