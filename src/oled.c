@@ -19,7 +19,7 @@ extern const char font[];
 void internal_clock();
 void alarm(void);
 
-void oled_main_startingmsg(void)
+void oled_main_startingmsg(void);
 
 void enable_ports_oled(void) {
     // Only enable port C for the keypad
@@ -160,7 +160,7 @@ void oled_main_startingmsg(void){
     spi1_display2("Get Passcode");
 }
 
-void oled_main_checkpasscode(void) {
+int oled_checkpasscode(void) {
     internal_clock();
     init_tim7();
     init_spi1();

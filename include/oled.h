@@ -15,6 +15,6 @@ void append_digit(char digit);
 int check_passcode();
 void reset_passcode_entry();
 void clear_display();
-void oled_main();
+int oled_checkpasscode();
 
 #endif /* __OLED_H__ */

@@ -11,7 +11,7 @@ void enable_ports_oled();
 void enable_alarm_ports();
 void enable_keypad_ports();
 void enable_sensor();
-int oled_main();
+int oled_checkpasscode();
 
 int main(){
     internal_clock();
@@ -23,9 +23,13 @@ int main(){
     // keypad();
 
     // functionality of the system
-    int password = oled_main();
+    int password = oled_checkpasscode();
     if (password) {
         enable_sensor();
+        init_tim6();
+    }
+    if (password == 0) {
+        alarm();
     }
 
     
