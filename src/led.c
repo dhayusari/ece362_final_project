@@ -5,7 +5,7 @@ void setup_tim1(void);
 void set_color(uint16_t red, uint16_t green, uint16_t blue);
 void led_off(void);
 void white_pulse(void);
-void red_flash(curr_state);
+void red_flash(int curr_state);
 void green(void);
 void green_flash(void);
 void led_main();
@@ -88,7 +88,7 @@ void green_flash(void)
     {
         green(); 
         nano_wait(initialDelay);
-        setColor(0, 0, 0);
+        set_color(0, 0, 0);
         nano_wait(initialDelay);
 
         //Decrease delay to increase flashing speed
