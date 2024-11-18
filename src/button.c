@@ -8,8 +8,7 @@ volatile uint32_t button10_pressed = 0; // Variable to store the value when butt
 
 void button();
 void EXTI4_15_IRQHandler(void);
-
-  
+ 
 void button() {
   //Using PC 9-10 as inputs for push buttons
   RCC -> AHBENR |= RCC_AHBENR_GPIOCEN;
