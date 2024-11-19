@@ -106,15 +106,6 @@ void spi1_display2(const char *string) {
     }
 }
 
-uint16_t display[34] = {
-        0x002, // Command to set the cursor at the first position line 1
-        0x200+'E', 0x200+'C', 0x200+'E', 0x200+'3', 0x200+'6', + 0x200+'2', 0x200+' ', 0x200+'i',
-        0x200+'s', 0x200+' ', 0x200+'t', 0x200+'h', + 0x200+'e', 0x200+' ', 0x200+' ', 0x200+' ',
-        0x0c0, // Command to set the cursor at the first position line 2
-        0x200+'c', 0x200+'l', 0x200+'a', 0x200+'s', 0x200+'s', + 0x200+' ', 0x200+'f', 0x200+'o',
-        0x200+'r', 0x200+' ', 0x200+'y', 0x200+'o', + 0x200+'u', 0x200+'!', 0x200+' ', 0x200+' ',
-};
-
 # define MAX_DIGITS 4
 //predefined passcode
 const char predefined_passcode[] = "1234";
@@ -152,7 +143,6 @@ void clear_display(void) {
 }
 
 void oled_main_startingmsg(void){
-    //call this function when system_init button is pressed
     clear_display();
     spi1_display1("Welcome");
     nano_wait(2000000);
