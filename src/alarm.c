@@ -7,6 +7,7 @@ void clear_display();
 void spi1_display1(const char *string);
 void nano_wait(unsigned int n);
 void alarm(void);
+void disable_alarm(void);
 
 void enable_alarm_ports(){
     //RCC for GPIOA
@@ -22,4 +23,8 @@ void alarm(void){
     GPIOA -> BSRR |= GPIO_BSRR_BS_3;
     // nano_wait(50000000);
     // GPIOA -> BSRR |= GPIO_BSRR_BR_3;
+}
+
+void disable_alarm(void) {
+    GPIOA -> BSRR |= GPIO_BSRR_BR_3;
 }

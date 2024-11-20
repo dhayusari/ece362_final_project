@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include "oled.h"
 #include "keypad.h"
+#include "motion_sensor.h"
 
 void internal_clock();
 void enable_sensor_ports();
@@ -19,6 +20,7 @@ void clear_display();
 void spi1_display1(const char *string);
 void read_motion();
 void disable_sensor();
+void disable_alarm();
 
 
 int main(){
@@ -28,10 +30,7 @@ int main(){
     enable_keypad_ports();
     enable_alarm_ports();
     enable_ports_oled();
-    
-    // keypad();
 
-    //char key = get_keypress();
     // functionality of the system
     int password = oled_checkpasscode();
     if (password) {
@@ -44,6 +43,7 @@ int main(){
             password = oled_checkpasscode();
             if (password) {
                 disable_sensor();
+                disable_alarm();
                 clear_display();
                 spi1_display1("Disabled Sensor");
             } else {
@@ -53,6 +53,5 @@ int main(){
     } else {
         alarm();
     }
-
     
 }
