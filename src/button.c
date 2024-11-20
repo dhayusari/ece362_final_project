@@ -3,8 +3,8 @@
 #include "stm32f0xx.h"
 #include <stdint.h>
 
-volatile uint32_t button9_pressed = 0; // Variable to store the value when button 9 is pressed
-volatile uint32_t button10_pressed = 0; // Variable to store the value when button 10 is pressed
+extern volatile uint32_t button9_pressed = 0; // Variable to store the value when button 9 is pressed
+extern volatile uint32_t button10_pressed = 0; // Variable to store the value when button 10 is pressed
 
 void button();
 void EXTI4_15_IRQHandler(void);

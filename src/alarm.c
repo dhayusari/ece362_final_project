@@ -2,7 +2,6 @@
 #include "stm32f0xx.h"
 #include "oled.h"
 
-void enable_alarm_ports();
 void clear_display();
 void spi1_display1(const char *string);
 void nano_wait(unsigned int n);
