@@ -10,7 +10,7 @@ void enable_alarm_ports(){
 
     GPIOA -> MODER &= ~(GPIO_MODER_MODER3);
     GPIOA -> MODER |= GPIO_MODER_MODER3_0; // PA3 as output
-}
+};
 
 void alarm(void){
     clear_display();

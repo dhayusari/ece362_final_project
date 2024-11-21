@@ -1,5 +1,6 @@
 #include "stm32f0xx.h"
 #include "led.h"
+#include "oled.h"
 
 
 void led_init(void) {
@@ -98,7 +99,7 @@ void led_main(int system_state) {
     }  
     else if(system_state == 2) //security system on
     {   
-        led_off;
+        led_off();
         white_pulse();
     }
     else if(system_state == 3) //security system triggered
