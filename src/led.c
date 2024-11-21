@@ -28,7 +28,7 @@ void led_init(void) {
     TIM1->CR1 |= TIM_CR1_CEN;
 }
 
-void set_color(uint16_t red, uint16_t green, uint16_t blue) {
+void set_color(uint32_t red, uint32_t green, uint32_t blue) {
     TIM1 -> CCR1 = red;
     TIM1 -> CCR2 = green;
     TIM1 -> CCR3 = blue;
@@ -41,11 +41,11 @@ void led_off(void) {
 
 void white_pulse(void) {
     //Pulses LED in white color, showing that the security system is on and enabled
-    for(uint16_t i = 0; i < 65535; i += 1000) {
+    for(uint32_t i = 0; i < 65535; i += 1000) {
         set_color(i, i, i);
         nano_wait(10000);
     }
-    for(uint16_t i = 65535; i > 0; i -= 1000) {
+    for(uint32_t i = 65535; i > 0; i -= 1000) {
         set_color(i, i, i);
         nano_wait(10000);
     }
@@ -88,11 +88,22 @@ void green_flash(void)
 void led_main(int system_state) {
     //system_state at 0 means security is off
     if(system_state == 0) //security off
+    {
         led_off();
+    }
     else if(system_state == 1) //passcode correctly input, light flashes to show user security will turn on shortly
+    {
+        led_off();
         green_flash();
+    }  
     else if(system_state == 2) //security system on
+    {   
+        led_off;
         white_pulse();
+    }
     else if(system_state == 3) //security system triggered
+    {
+        led_off();
         red_flash();
+    }
 }

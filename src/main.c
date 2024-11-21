@@ -20,37 +20,39 @@ int main(){
     //initialize button
     button_init();
     led_init();
-    
+    int system_state = 0;
+    int password;
+    led_main(system_state);
+
     // keypad();
     while(1) {
         if(button9_pressed) {
             button9_pressed = 0;
-            int password = oled_checkpasscode;
+            password = oled_checkpasscode();
             if (password) {
+                system_state = 1;
+                led_main(system_state);
                 enable_sensor();
                 init_tim6();
                 clear_display();
-                spi1_display1("Detecting Motion");
-                char key = get_keypress();
-                if (key == 'A') {
-                   password = oled_checkpasscode();
-                    if (password) {
-                        disable_sensor();
-                        clear_display();
-                        spi1_display1("Disabled Sensor");
-                    } 
-                    else {
-                        alarm();
-                    }
-                }
+                spi1_display1("Detecting Motion"); 
             } 
             else {
+                system_state = 3;
+                led_main(system_state);
                 alarm();
             }
         }
         if(button10_pressed) {
             button10_pressed = 0;
-            disable_sensor();
+            password = oled_checkpasscode();
+            if (password) {
+                system_state = 0;
+                led_main(system_state);
+                disable_sensor();
+                clear_display();
+                spi1_display1("Disabled Sensor"); 
+            } 
         }
     }
     // char key = get_keypress();

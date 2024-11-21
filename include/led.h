@@ -5,7 +5,7 @@
 
 // Function prototypes for LED control
 void led_init(void);
-void set_color(uint16_t red, uint16_t green, uint16_t blue);
+void set_color(uint32_t red, uint32_t green, uint32_t blue);
 void led_off(void);
 void white_pulse(void);
 void red_flash(void);

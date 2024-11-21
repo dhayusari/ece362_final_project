@@ -107,7 +107,7 @@ void TIM6_DAC_IRQHandler() {
 
 void init_tim6(void) {
     RCC->APB1ENR |= RCC_APB1ENR_TIM6EN;  // Enable TIM6 clock
-    TIM6->PSC = 4800 - 1;  // Prescaler for 10ms
+    TIM6->PSC = 48000 - 1;  // Prescaler for 10ms
     TIM6->ARR = 100 - 1;  // Auto-reload value
     TIM6->DIER |= TIM_DIER_UIE;  // Enable update interrupt
     NVIC->ISER[0] = (1 << TIM6_DAC_IRQn);  // Enable TIM6 IRQ in NVIC
