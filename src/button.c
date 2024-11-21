@@ -27,28 +27,13 @@ void button_init(void) {
 /*Checks pending register for interrupt, and then also checks if interrupt is for 
 PC 9 or 10; if true, then saves 1 to respective button variables*/
 void EXTI4_15_IRQHandler(void) {
-  // if(EXTI -> PR & EXTI_PR_PR9) {
-  //   EXTI -> PR |= EXTI_PR_PR9;
-  //   button9_pressed = 1;
-  // }
+  if(EXTI -> PR & EXTI_PR_PR9) {
+    EXTI -> PR |= EXTI_PR_PR9;
+    button9_pressed = 1;
+  }
 
-  // if(EXTI -> PR & EXTI_PR_PR10) {
-  //   EXTI -> PR |= EXTI_PR_PR10;
-  //   button10_pressed = 1;
-  // }
-
-  if (EXTI->PR & EXTI_PR_PR9) { // Check if PC9 triggered the interrupt
-      EXTI->PR |= EXTI_PR_PR9;  // Clear pending interrupt for PC9
-      button9_pressed = 1;      // Set button 9 flag
-
-      // Debugging: Toggle green LED
-      TIM1->CCR2 = TIM1->CCR2 ? 0 : 65535; // Toggle green LED
-    }
-  if (EXTI->PR & EXTI_PR_PR10) { // Check if PC10 triggered the interrupt
-      EXTI->PR |= EXTI_PR_PR10;  // Clear pending interrupt for PC10
-      button10_pressed = 1;      // Set button 10 flag
-
-      // Debugging: Toggle red LED
-      TIM1->CCR1 = TIM1->CCR1 ? 0 : 65535; // Toggle red LED
+  if(EXTI -> PR & EXTI_PR_PR10) {
+    EXTI -> PR |= EXTI_PR_PR10;
+    button10_pressed = 1;
   }
 }

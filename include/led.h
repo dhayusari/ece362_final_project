@@ -11,5 +11,6 @@ void white_pulse(void);
 void red_flash(void);
 void green(void);
 void green_flash(void);
+void led_main(int system_state);
 
 #endif // LED_H
