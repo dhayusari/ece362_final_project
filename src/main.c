@@ -15387,10 +15387,12 @@ const Picture image = {
 
 int main(){
     internal_clock();
+    
     LCD_Setup();
     LCD_DrawPicture(0, 0, &image);
     LCD_DrawString(85, 215, 0xFFFF, 0x0000, "GET", 16, 1);
     LCD_DrawString(115, 215, 0xFFFF, 0x0000, "OUT!!", 16, 1);
+
     //enabling ports
     enable_sensor_ports();
     enable_keypad_ports();
