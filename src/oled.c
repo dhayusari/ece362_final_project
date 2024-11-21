@@ -8,6 +8,7 @@
 #include "stm32f0xx.h"
 #include "oled.h"
 #include "keypad.h"
+#include "alarm.h"
 #include <string.h>
 
 uint8_t col; // the column being scanned
@@ -17,9 +18,6 @@ uint16_t msg[8] = { 0x0000,0x0100,0x0200,0x0300,0x0400,0x0500,0x0600,0x0700 };
 extern const char font[];
 
 void internal_clock();
-void alarm(void);
-
-void oled_main_startingmsg(void);
 
 void enable_ports_oled(void) {
     // Only enable port C for the keypad
@@ -129,6 +127,12 @@ int check_passcode() {
         spi1_display2("INCORRECT");
         return 0;
     }
+}
+
+void nano_wait(unsigned int n) {
+    asm(    "        mov r0,%0\n"
+            "repeat: sub r0,#83\n"
+            "        bgt repeat\n" : : "r"(n) : "r0", "cc");
 }
 
 void reset_passcode_entry(void) {

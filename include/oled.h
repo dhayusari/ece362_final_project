@@ -2,6 +2,7 @@
 #define __OLED_H__
 
 void enable_ports_oled();
+void oled_main_startingmsg(void);
 void init_tim7();
 void TIM7_IRQHandler();
 void init_spi1();

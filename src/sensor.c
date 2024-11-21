@@ -1,20 +1,11 @@
 // MOTION SENSOR INITIALIZATION AND FUNCTIONS
 #include "stm32f0xx.h"
 #include <stdint.h>
+#include "sensor.h"
+#include "alarm.h"
+#include "oled.h"
 
 void internal_clock();
-void enable_sensor_ports();
-void enable_sensor();
-void disable_sensor();
-void read_motion();
-void update_hist_sensor();
-void init_tim6();
-void TIM6_DAC_IRQHandler();
-
-//other functions needed
-void alarm();
-void clear_display();
-void spi1_display1(const char *string);
 
 //global variables
 uint8_t hist; // 8 sample bits of input
