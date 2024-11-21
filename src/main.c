@@ -7721,13 +7721,12 @@ int main(){
     int system_state = 0;
     int password;
     led_main(system_state);
+    clear_display();
 
     // keypad();
     while(1) {
         if(button9_pressed) {
             button9_pressed = 0;
-            system_state = 0;
-            led_main(system_state);
             password = oled_checkpasscode();
             if (password) {
                 system_state = 1;
@@ -7743,7 +7742,7 @@ int main(){
                 alarm();
             }
         }
-        if(button10_pressed) {
+        if(button10_pressed && password) {
             button10_pressed = 0;
             password = oled_checkpasscode();
             if (password) {
