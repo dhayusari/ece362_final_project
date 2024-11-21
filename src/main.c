@@ -15418,6 +15418,7 @@ int main(){
             if (password) {
                 system_state = 1;
                 led_main(system_state);
+                system_state = 2;
                 enable_sensor();
                 init_tim6();
                 clear_display();

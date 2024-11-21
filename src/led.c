@@ -40,15 +40,17 @@ void led_off(void) {
     set_color(999, 999, 999);
 }
 
-void white_pulse(void) {
+void white_pulse(int system_state) {
     //Pulses LED in white color, showing that the security system is on and enabled
-    for(uint32_t i = 0; i < 999; i += 100) {
+    while(system_state == 2) {
+        for(uint32_t i = 0; i < 999; i += 100) {
         set_color(i, i, i);
-        nano_wait(50000);
-    }
-    for(uint32_t j = 999; j > 0; j -= 100) {
-        set_color(j, j, j);
-        nano_wait(50000);
+        nano_wait(5000000);
+        }
+        for(uint32_t j = 999; j > 0; j -= 100) {
+            set_color(j, j, j);
+            nano_wait(5000000);
+        }
     }
 }
 
@@ -57,9 +59,9 @@ void red_flash(void) {
     //security is disabled, sending curr_state to 0 ending flashing
     while(1) {
         set_color(1, 999, 999);
-        nano_wait(20000);
+        nano_wait(10000000);
         set_color(999, 999, 999);
-        nano_wait(20000);
+        nano_wait(10000000);
     }
 }
 
@@ -69,22 +71,27 @@ void green(void) {
 
 void green_flash(void)
 {
-    int max = 50000;
-    int min = 2500;
-    uint32_t step = (max - min) / 15; //Amount to reduce the delay for each second
+    uint32_t initial_delay = 50000000;  // Initial delay in nanoseconds (500ms)
+    uint32_t final_delay = 5000000;   // Final delay in nanoseconds (100ms)
+    uint32_t step; // Step to reduce delay
 
-    for (int i = 0; i < 15; i++) 
-    {
-        green(); 
-        nano_wait(max);
-        set_color(999, 999, 999);
-        nano_wait(max);
+    int flashes = 15; // Choose a number of flashes for smooth transition
+    step = (initial_delay - final_delay) / flashes;
 
-        //Decrease delay to increase flashing speed
-        if (max > min)
-            max -= step;
+    uint32_t current_delay = initial_delay;
+
+    for (int i = 0; i < flashes; i++) {
+        // Turn the LED ON
+        green();
+        nano_wait(current_delay);
+        led_off();       
+        nano_wait(current_delay);   
+
+        // Decrease the delay for the next iteration
+        if (current_delay > final_delay) {
+            current_delay -= step;
+        }
     }
-
     green(); //After 15 seconds, light will become solid state of green to show security system is now set
 }
 
@@ -102,7 +109,7 @@ void led_main(int system_state) {
     else if(system_state == 2) //security system on
     {   
         led_off();
-        white_pulse();
+        white_pulse(system_state);
     }
     else if(system_state == 3) //security system triggered
     {
