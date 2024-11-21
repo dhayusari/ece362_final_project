@@ -7,6 +7,8 @@
 #include "sensor.h"
 #include "tft.h"
 #include "lcd.h"
+#include "button.h"
+
 
 void internal_clock();
 
@@ -7713,6 +7715,8 @@ int main(){
     enable_keypad_ports();
     enable_alarm_ports();
     enable_ports_oled();
+    //initialize button
+    button();
     
     // keypad();
 
@@ -7739,8 +7743,5 @@ int main(){
         alarm();
     }
 
-    
-
-    
     
 }

@@ -188,7 +188,7 @@ int oled_checkpasscode(void) {
         }
     }
     if (attempts == MAX_ATTEMPTS){
-       // alarm();
+       alarm();
        return 0;
     }
     return 0;

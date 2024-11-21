@@ -17,3 +17,7 @@ void alarm(void){
     // nano_wait(50000000);
     // GPIOA -> BSRR |= GPIO_BSRR_BR_3;
 }
+
+void disable_alarm(void) {
+    GPIOA -> BSRR |= GPIO_BSRR_BR_3;
+}

@@ -12,4 +12,5 @@ char get_key_event(void);
 char get_keypress();
 void show_keys(void);
 
-#endif /* __KEYPAD_H__ */
+
+#endif /* __MOTION_SENSOR_H__ */
