@@ -2,12 +2,6 @@
 #include "stm32f0xx.h"
 #include "oled.h"
 
-void clear_display();
-void spi1_display1(const char *string);
-void nano_wait(unsigned int n);
-void alarm(void);
-void disable_alarm(void);
-
 void enable_alarm_ports(){
     //RCC for GPIOA
     RCC -> AHBENR |= RCC_AHBENR_GPIOAEN;

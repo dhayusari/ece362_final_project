@@ -1,10 +1,11 @@
 // MOTION SENSOR INITIALIZATION AND FUNCTIONS
 #include "stm32f0xx.h"
 #include <stdint.h>
-#include "keypad.h"
+#include "sensor.h"
+#include "alarm.h"
 #include "oled.h"
-#include "motion_sensor.h"
-void alarm();
+
+void internal_clock();
 
 uint8_t hist_sensor; // 8 sample bits of input
 int motion_cnt = 0;
