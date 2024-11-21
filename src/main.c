@@ -7740,7 +7740,7 @@ int main(){
                 alarm();
             }
         }
-        if(button10_pressed && password) {
+        if(button10_pressed && password) { //Check to make sure the system is on in order for this button to work
             button10_pressed = 0;
             password = oled_checkpasscode();
             if (password) {
