@@ -15398,27 +15398,26 @@ int main(){
     enable_keypad_ports();
     enable_alarm_ports();
     enable_ports_oled();
-    //initialize button
+    //initialize button and led
     button_init();
     led_init();
+
     int system_state = 0;
     int password;
     led_main(system_state);
-    clear_display();
+    clear_display(); //  <-- this doesn't even work
 
     // keypad();
     while(1) {
         if(button9_pressed) {
             button9_pressed = 0;
             password = oled_checkpasscode();
-            if (password) {
-                system_state = 1;
-                led_main(system_state);
-                enable_sensor();
-                init_tim6();
-                clear_display();
-                spi1_display1("Detecting Motion"); 
-            } 
+            led_main(system_state);
+            enable_sensor();
+            init_tim6();
+            clear_display();
+            spi1_display1("Detecting Motion"); 
+        } 
             else {
                 system_state = 3;
                 led_main(system_state);

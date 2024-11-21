@@ -44,11 +44,11 @@ void white_pulse(void) {
     //Pulses LED in white color, showing that the security system is on and enabled
     for(uint32_t i = 0; i < 999; i += 100) {
         set_color(i, i, i);
-        nano_wait(10000);
+        nano_wait(50000);
     }
     for(uint32_t j = 999; j > 0; j -= 100) {
         set_color(j, j, j);
-        nano_wait(10000);
+        nano_wait(50000);
     }
 }
 
@@ -64,21 +64,21 @@ void red_flash(void) {
 }
 
 void green(void) {
-    set_color(999, 1, 999); //Passcode is input correctly, LED turns green
+    set_color(999, 999, 1); //Passcode is input correctly, LED turns green
 }
 
 void green_flash(void)
 {
-    int max = 999;
-    int min = 1;
+    int max = 50000;
+    int min = 2500;
     uint32_t step = (max - min) / 15; //Amount to reduce the delay for each second
 
     for (int i = 0; i < 15; i++) 
     {
         green(); 
-        nano_wait(50000);
+        nano_wait(max);
         set_color(999, 999, 999);
-        nano_wait(50000);
+        nano_wait(max);
 
         //Decrease delay to increase flashing speed
         if (max > min)
