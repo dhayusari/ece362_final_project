@@ -3,22 +3,25 @@
 #include <stdint.h>
 #include "button.h"
 
-extern volatile uint32_t button9_pressed;
-extern volatile uint32_t button10_pressed;
+volatile uint32_t button9_pressed = 0; // Variable to store the value when button 9 is pressed
+volatile uint32_t button10_pressed = 0; // Variable to store the value when button 10 is pressed
+
+void button_init(void);
+void EXTI4_15_IRQHandler(void);
  
-void button() {
+void button_init(void) {
   //Using PC 9-10 as inputs for push buttons
   RCC -> AHBENR |= RCC_AHBENR_GPIOCEN;
   RCC -> APB2ENR |= RCC_APB2ENR_SYSCFGCOMPEN;
 
-  GPIOC -> MODER &= ~(GPIO_MODER_MODER9_1 | GPIO_MODER_MODER10_1);
+  GPIOC->MODER &= ~(GPIO_MODER_MODER9 | GPIO_MODER_MODER10); // Set PC9 and PC10 as input
   GPIOC -> PUPDR |= (GPIO_PUPDR_PUPDR9_1 | GPIO_PUPDR_PUPDR10_1);
 
   SYSCFG -> EXTICR[2] |= 0x0020;
   SYSCFG -> EXTICR[2] |= 0x0200;
   EXTI -> RTSR |= (EXTI_RTSR_RT9 | EXTI_RTSR_RT10); //Using rising trigger for interrupt
   EXTI -> IMR |= (EXTI_IMR_IM9 | EXTI_IMR_IM10);
-  NVIC -> ISER[0] |= 1<<EXTI4_15_IRQn;
+  NVIC_EnableIRQ(EXTI4_15_IRQn); 
 }
 
 /*Checks pending register for interrupt, and then also checks if interrupt is for 

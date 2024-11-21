@@ -6,7 +6,6 @@
 #include "alarm.h"
 #include "sensor.h"
 #include "button.h"
-#include "sensor.h"
 #include "led.h"
 
 void internal_clock();
@@ -18,46 +17,42 @@ int main(){
     enable_keypad_ports();
     enable_alarm_ports();
     enable_ports_oled();
-    //setup_tim1();
-    //led_main(0);
     //initialize button
-    // button();
+    button_init();
+    led_init();
     
-    // if (button9_pressed) {
-    //     GPIOA -> BSRR |= GPIO_BSRR_BS_3;
-        
-    // }
-    // if (button10_pressed) {
-    //     GPIOA -> BSRR |= GPIO_BSRR_BR_3;
-    // }
-    int password = oled_checkpasscode();
-    if (password) {
-        enable_sensor();
-        init_tim6();
-        clear_display();
-        spi1_display1("Detecting Motion");
-        //led_main(2);
-        char key = get_keypress();
-        if (key == 'A') {
-            password = oled_checkpasscode();
-        if (password) {
+    // keypad();
+    while(1) {
+        if(button9_pressed) {
+            button9_pressed = 0;
+            int password = oled_checkpasscode;
+            if (password) {
+                enable_sensor();
+                init_tim6();
+                clear_display();
+                spi1_display1("Detecting Motion");
+                char key = get_keypress();
+                if (key == 'A') {
+                   password = oled_checkpasscode();
+                    if (password) {
+                        disable_sensor();
+                        clear_display();
+                        spi1_display1("Disabled Sensor");
+                    } 
+                    else {
+                        alarm();
+                    }
+                }
+            } 
+            else {
+                alarm();
+            }
+        }
+        if(button10_pressed) {
+            button10_pressed = 0;
             disable_sensor();
-            disable_alarm();
-            clear_display();
-            spi1_display1("Disabled Sensor");
-        } else {
-            alarm();
         }
     }
-    } else {
-        alarm();
-    }
-        //     button9_pressed = 0;
-        // }
-        // if(button10_pressed == 1) {
-        //     disable_sensor();
-        //     button10_pressed = 0;
-        // }
     // char key = get_keypress();
     // functionality of the system
     //int password = oled_checkpasscode();
