@@ -37,32 +37,34 @@ void set_color(uint32_t red, uint32_t green, uint32_t blue) {
 
 void led_off(void) {
     //Security system is off, LED is off
-    set_color(0, 0, 0);
+    set_color(999, 999, 999);
 }
 
 void white_pulse(void) {
     //Pulses LED in white color, showing that the security system is on and enabled
-    for(uint32_t i = 0; i < 65535; i += 1000) {
+    for(uint32_t i = 0; i < 999; i += 100) {
         set_color(i, i, i);
         nano_wait(10000);
     }
-    for(uint32_t i = 65535; i > 0; i -= 1000) {
-        set_color(i, i, i);
+    for(uint32_t j = 999; j > 0; j -= 100) {
+        set_color(j, j, j);
         nano_wait(10000);
     }
 }
 
-void red_flash(void) {
+void red_flash(int system_state) {
     //Security system is triggered, curr_state is set to 1 and flashes red until
     //security is disabled, sending curr_state to 0 ending flashing
-    set_color(65535, 0, 0);
-    nano_wait(20000);
-    set_color(0, 0, 0);
-    nano_wait(20000);
+    while (system_state == 3) {
+        set_color(999, 0, 0);
+        nano_wait(20000);
+        set_color(0, 0, 0);
+        nano_wait(20000);
+    }
 }
 
 void green(void) {
-    set_color(0, 65535, 0); //Passcode is input correctly, LED turns green
+    set_color(0, 999, 0); //Passcode is input correctly, LED turns green
 }
 
 void green_flash(void)
@@ -105,6 +107,6 @@ void led_main(int system_state) {
     else if(system_state == 3) //security system triggered
     {
         led_off();
-        red_flash();
+        red_flash(system_state);
     }
 }
