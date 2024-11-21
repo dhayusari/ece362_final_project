@@ -52,37 +52,37 @@ void white_pulse(void) {
     }
 }
 
-void red_flash(int system_state) {
+void red_flash(void) {
     //Security system is triggered, curr_state is set to 1 and flashes red until
     //security is disabled, sending curr_state to 0 ending flashing
-    while (system_state == 3) {
-        set_color(999, 0, 0);
+    while(1) {
+        set_color(1, 999, 999);
         nano_wait(20000);
-        set_color(0, 0, 0);
+        set_color(999, 999, 999);
         nano_wait(20000);
     }
 }
 
 void green(void) {
-    set_color(0, 999, 0); //Passcode is input correctly, LED turns green
+    set_color(999, 1, 999); //Passcode is input correctly, LED turns green
 }
 
 void green_flash(void)
 {
-    uint32_t initialDelay = 500000; //Initial delay speed
-    uint32_t minDelay = 100000; //Fastest delay speed
-    uint32_t step = (initialDelay - minDelay) / 15; //Amount to reduce the delay for each second
+    int max = 999;
+    int min = 1;
+    uint32_t step = (max - min) / 15; //Amount to reduce the delay for each second
 
     for (int i = 0; i < 15; i++) 
     {
         green(); 
-        nano_wait(initialDelay);
-        set_color(0, 0, 0);
-        nano_wait(initialDelay);
+        nano_wait(50000);
+        set_color(999, 999, 999);
+        nano_wait(50000);
 
         //Decrease delay to increase flashing speed
-        if (initialDelay > minDelay)
-            initialDelay -= step;
+        if (max > min)
+            max -= step;
     }
 
     green(); //After 15 seconds, light will become solid state of green to show security system is now set
@@ -107,6 +107,6 @@ void led_main(int system_state) {
     else if(system_state == 3) //security system triggered
     {
         led_off();
-        red_flash(system_state);
+        red_flash();
     }
 }
