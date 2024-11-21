@@ -1,14 +1,6 @@
 #include "stm32f0xx.h"
+#include "led.h"
 
-void nano_wait(unsigned int n);
-void setup_tim1(void);
-void set_color(uint16_t red, uint16_t green, uint16_t blue);
-void led_off(void);
-void white_pulse(void);
-void red_flash(int curr_state);
-void green(void);
-void green_flash(void);
-void led_main(int system_state);
 
 void setup_tim1(void) {
     //We are using PA 8-10
@@ -100,17 +92,13 @@ void green_flash(void)
 }
 
 void led_main(int system_state) {
-    setup_tim1();
-
     //system_state at 0 means security is off
-    while(1) {
-        if(system_state == 0) //security off
-            led_off();
-        else if(system_state == 1) //passcode correctly input, light flashes to show user security will turn on shortly
-            green_flash();
-        else if(system_state == 2) //security system on
-            white_pulse();
-        else if(system_state == 3) //security system triggered
-            red_flash(system_state);
-    }
+    if(system_state == 0) //security off
+        led_off();
+    else if(system_state == 1) //passcode correctly input, light flashes to show user security will turn on shortly
+        green_flash();
+    else if(system_state == 2) //security system on
+        white_pulse();
+    else if(system_state == 3) //security system triggered
+        red_flash(system_state);
 }

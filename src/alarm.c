@@ -1,12 +1,8 @@
 // ALARM FUNCTIONS
 #include "stm32f0xx.h"
 #include "oled.h"
-
-void clear_display();
-void spi1_display1(const char *string);
-void nano_wait(unsigned int n);
-void alarm(void);
-void disable_alarm(void);
+#include "alarm.h"
+#include "led.h"
 
 void enable_alarm_ports(){
     //RCC for GPIOA
@@ -20,10 +16,12 @@ void alarm(void){
     clear_display();
     spi1_display1("ALARMMM");
     GPIOA -> BSRR |= GPIO_BSRR_BS_3;
+    //led_main(3);
     // nano_wait(50000000);
     // GPIOA -> BSRR |= GPIO_BSRR_BR_3;
 }
 
 void disable_alarm(void) {
     GPIOA -> BSRR |= GPIO_BSRR_BR_3;
+    //led_main(0);
 }

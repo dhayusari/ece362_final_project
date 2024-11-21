@@ -3,13 +3,16 @@
 #include <stdint.h>
 #include "keypad.h"
 #include "oled.h"
-#include "motion_sensor.h"
-void alarm();
+#include "sensor.h"
+#include "led.h"
+#include "alarm.h"
 
 uint8_t hist_sensor; // 8 sample bits of input
 int motion_cnt = 0;
 int no_motion_ct = 0;
 int motion = 1;
+int state[2] = {0, 0};
+int detection = 0;
 
 void enable_sensor_ports(){
     // RCC for GPIOA
@@ -32,37 +35,43 @@ void disable_sensor(){
 
 void read_motion() {
     // char key = get_keypress();
-    if (hist_sensor & 0x01) {  // Check if the latest bit indicates motion
+    if (hist_sensor & 0xFF) {  // Check if the latest bit indicates motion
         motion_cnt++;
         no_motion_ct = 0;  // Reset no motion counter
-        if (motion_cnt >= 7) {  // Threshold for alarm
-            alarm();
-            clear_display();
-            spi1_display1("Motion Detected!");
+        if (motion_cnt >= 255) {  // Threshold for alarm
             motion_cnt = 0;  // Reset motion counter
-            // char key = get_keypress();
-            // if (key == 'A') {
-            //     int password = oled_checkpasscode();
-            //     if (password) {
-            //         disable_sensor();
-            //         clear_display();
-            //         spi1_display1("Disabled Sensor");
-            //     } else {
-            //         alarm();
-            //     }
-            // }
-            //return 1;
-            TIM6 -> CR1 &= ~(TIM_CR1_CEN);
+            state[0] = state[1];
+            state[1] = 1;
+            //TIM6 -> CR1 &= ~(TIM_CR1_CEN);
         } 
     } else {  // No motion detected
         no_motion_ct++;
+        
         if (no_motion_ct >= 8) {  // Reset after consecutive no-motion states
             motion_cnt = 0;
-            clear_display();
-            spi1_display1("No Motion Detected");
+            state[0] = state[1];
+            state[1] = 0;
         }
         //return 0;
     }
+
+    if (state[0] == state[1]) {
+        if (state[1] == 1) {
+            if (detection > 7) {
+                alarm();
+                clear_display();
+                spi1_display1("Motion Detected!");
+                TIM6 -> CR1 &= ~(TIM_CR1_CEN);
+            }
+            else {
+                detection++;
+            }
+        } else {
+            clear_display();
+            spi1_display1("No Motion!");
+            }
+    }
+    
 }
 
 // void read_motion() {
@@ -106,7 +115,7 @@ void TIM6_DAC_IRQHandler() {
 void init_tim6(void) {
     RCC->APB1ENR |= RCC_APB1ENR_TIM6EN;  // Enable TIM6 clock
     TIM6->PSC = 4800 - 1;  // Prescaler for 10ms
-    TIM6->ARR = 100 - 1;  // Auto-reload value
+    TIM6->ARR = 10 - 1;  // Auto-reload value
     TIM6->DIER |= TIM_DIER_UIE;  // Enable update interrupt
     NVIC->ISER[0] = (1 << TIM6_DAC_IRQn);  // Enable TIM6 IRQ in NVIC
     TIM6->CR1 |= TIM_CR1_CEN;  // Start TIM6

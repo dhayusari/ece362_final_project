@@ -8,6 +8,7 @@
 #include "stm32f0xx.h"
 #include "oled.h"
 #include "keypad.h"
+#include "led.h"
 #include <string.h>
 
 uint8_t col; // the column being scanned
@@ -171,6 +172,7 @@ int oled_checkpasscode(void) {
         }
         else if (key == '#'){
             if (check_passcode()){
+                //led_main(1);
                 return 1;
             }
             else{
