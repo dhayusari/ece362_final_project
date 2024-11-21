@@ -7726,6 +7726,8 @@ int main(){
     while(1) {
         if(button9_pressed) {
             button9_pressed = 0;
+            system_state = 0;
+            led_main(system_state);
             password = oled_checkpasscode();
             if (password) {
                 system_state = 1;
