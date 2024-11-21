@@ -15397,34 +15397,39 @@ int main(){
     enable_sensor_ports();
     enable_keypad_ports();
     enable_alarm_ports();
-    enable_ports_oled();
-    //initialize button and led
+    //initialize button
     button_init();
     led_init();
 
     int system_state = 0;
     int password;
     led_main(system_state);
-    clear_display(); //  <-- this doesn't even work
-
+    // clear_display();
+    init_tim7();
+    init_spi2();
+    spi2_init_oled();
+    clear_display();
+    spi2_display1("Press to Enable"); 
     // keypad();
     while(1) {
         if(button9_pressed) {
             button9_pressed = 0;
             password = oled_checkpasscode();
-            led_main(system_state);
-            enable_sensor();
-            init_tim6();
-            clear_display();
-            spi1_display1("Detecting Motion"); 
-        } 
+            if (password) {
+                system_state = 1;
+                led_main(system_state);
+                enable_sensor();
+                init_tim6();
+                clear_display();
+                spi2_display1("Detecting Motion"); 
+            } 
             else {
                 system_state = 3;
                 led_main(system_state);
                 alarm();
             }
         }
-        if(button10_pressed && password) { //Check to make sure the system is on in order for this button to work
+        if(button10_pressed && system_state) { //Check to make sure the system is on in order for this button to work
             button10_pressed = 0;
             password = oled_checkpasscode();
             if (password) {
@@ -15432,32 +15437,10 @@ int main(){
                 led_main(system_state);
                 disable_sensor();
                 clear_display();
-                spi1_display1("Disabled Sensor"); 
+                spi2_display1("Disabled Sensor"); 
             } 
         }
     }
-    // char key = get_keypress();
-    // functionality of the system
-    //int password = oled_checkpasscode();
-    // if (password) {
-    //     enable_sensor();
-    //     init_tim6();
-    //     clear_display();
-    //     spi1_display1("Detecting Motion");
-    //     char key = get_keypress();
-    //     if (key == 'A') {
-    //         password = oled_checkpasscode();
-    //         if (password) {
-    //             disable_sensor();
-    //             clear_display();
-    //             spi1_display1("Disabled Sensor");
-    //         } else {
-    //             alarm();
-    //         }
-    //     }
-    // } else {
-    //     alarm();
-    // }
-
     
 }
+

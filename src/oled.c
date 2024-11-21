@@ -18,19 +18,6 @@ int msg_index = 0;
 uint16_t msg[8] = { 0x0000,0x0100,0x0200,0x0300,0x0400,0x0500,0x0600,0x0700 };
 extern const char font[];
 
-void internal_clock();
-
-void enable_ports_oled(void) {
-    // Only enable port C for the keypad
-    RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
-    GPIOC->MODER &= ~0xffff;
-    GPIOC->MODER |= 0x55 << (4*2);
-    GPIOC->OTYPER &= ~0xff;
-    GPIOC->OTYPER |= 0xf0;
-    GPIOC->PUPDR &= ~0xff;
-    GPIOC->PUPDR |= 0x55;
-}
-
 void init_tim7(void) {
     RCC->APB1ENR |= RCC_APB1ENR_TIM7EN;
     TIM7->PSC = 479;
@@ -50,35 +37,35 @@ void TIM7_IRQHandler(){
     drive_column(col);
 }
 
-void init_spi1() {
+void init_spi2() {
     //enable clock
-    RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
-    RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
+    RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
+    RCC->APB1ENR |= RCC_APB1ENR_SPI2EN;
     
-    GPIOA -> MODER &= ~(0xC000CC00);
-    GPIOA -> MODER |= 0x80008800;
-    GPIOA->AFR[1] &= ~(GPIO_AFRH_AFRH7);
-    GPIOA->AFR[0] &= ~(GPIO_AFRL_AFRL5 | GPIO_AFRL_AFRL7);
+    GPIOB -> MODER &= ~(GPIO_MODER_MODER12 | GPIO_MODER_MODER13 | GPIO_MODER_MODER15);
+    GPIOB -> MODER |= GPIO_MODER_MODER15_1 | GPIO_MODER_MODER13_1 | GPIO_MODER_MODER12_1;
+    GPIOB->AFR[1] &= ~(GPIO_AFRH_AFRH7 | GPIO_AFRH_AFRH5 | GPIO_AFRH_AFRH4);
+    
 
-    SPI1 -> CR1 &= ~(SPI_CR1_SPE);
-    SPI1 -> CR1 |= SPI_CR1_BR;
-    SPI1 -> CR2 = SPI_CR2_DS_3 | SPI_CR2_DS_0;
-    SPI1 -> CR1 |= SPI_CR1_MSTR;
-    SPI1 -> CR2 |= SPI_CR2_SSOE | SPI_CR2_NSSP;
-    SPI1 -> CR2 |= SPI_CR2_TXDMAEN;
-    SPI1 -> CR1 |= SPI_CR1_SPE;
+    SPI2 -> CR1 &= ~(SPI_CR1_SPE);
+    SPI2 -> CR1 |= SPI_CR1_BR;
+    SPI2 -> CR2 = SPI_CR2_DS_3 | SPI_CR2_DS_0;
+    SPI2 -> CR1 |= SPI_CR1_MSTR;
+    SPI2 -> CR2 |= SPI_CR2_SSOE | SPI_CR2_NSSP;
+    SPI2 -> CR2 |= SPI_CR2_TXDMAEN;
+    SPI2 -> CR1 |= SPI_CR1_SPE;
 }
 
 void spi_cmd(unsigned int data) {
-    while((SPI1->SR & SPI_SR_TXE) == 0);
-    SPI1->DR = data;  
+    while((SPI2->SR & SPI_SR_TXE) == 0);
+    SPI2->DR = data;  
 }
 
 void spi_data(unsigned int data) {
     spi_cmd(data |0x200);   
 }
 
-void spi1_init_oled() {
+void spi2_init_oled() {
     nano_wait(1000000);
     spi_cmd(0x38);
     spi_cmd(0x08);
@@ -89,7 +76,7 @@ void spi1_init_oled() {
     spi_cmd(0x0c);
 }
 
-void spi1_display1(const char *string) {
+void spi2_display1(const char *string) {
   spi_cmd(0x02);
   while (*string != '\0') {
     spi_data(*string);
@@ -97,7 +84,7 @@ void spi1_display1(const char *string) {
   }
 }
 
-void spi1_display2(const char *string) {
+void spi2_display2(const char *string) {
     spi_cmd(0xc0);
     while (*string != '\0') {
         spi_data(*string);
@@ -120,12 +107,12 @@ void append_digit(char digit) {
 
 int check_passcode() {
     if (strcmp(entered_digits, predefined_passcode) == 0){
-        spi1_display2("MATCHED!");
+        spi2_display2("MATCHED!");
         reset_passcode_entry();
         return 1;
     }
     else{
-        spi1_display2("INCORRECT");
+        spi2_display2("INCORRECT");
         return 0;
     }
 }
@@ -149,20 +136,15 @@ void clear_display(void) {
 
 void oled_main_startingmsg(void){
     clear_display();
-    spi1_display1("Welcome");
+    spi2_display1("Welcome");
     nano_wait(2000000);
     clear_display();
-    spi1_display1("Play Game To");
-    spi1_display2("Get Passcode");
+    spi2_display1("Play Game To");
+    spi2_display2("Get Passcode");
 }
 
 int oled_checkpasscode(void) {
-    internal_clock();
-    init_tim7();
-    init_spi1();
-    spi1_init_oled();
-    clear_display();
-    spi1_display1("Enter passcode:");
+    spi2_display1("Enter passcode:");
 
     int attempts = 0; //counter
     #define MAX_ATTEMPTS 3 //after max reached exit to alarm
@@ -172,7 +154,7 @@ int oled_checkpasscode(void) {
 
         if (key >= '0' && key <= '9'){
             append_digit(key);
-            spi1_display2(entered_digits);
+            spi2_display2(entered_digits);
         }
         else if (key == '#'){
             if (check_passcode()){
@@ -181,7 +163,7 @@ int oled_checkpasscode(void) {
             }
             else{
                 clear_display();
-                spi1_display1("Re-Enter Code");
+                spi2_display1("Re-Enter Code");
                 attempts++;
             }
             digit_index = 0;

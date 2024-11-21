@@ -14,7 +14,7 @@ void enable_alarm_ports(){
 
 void alarm(void){
     clear_display();
-    spi1_display1("ALARMMM");
+    spi2_display1("ALARMMM");
     GPIOA -> BSRR |= GPIO_BSRR_BS_3;
     //led_main(3);
     // nano_wait(50000000);
