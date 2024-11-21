@@ -29,11 +29,11 @@ PC 9 or 10; if true, then saves 1 to respective button variables*/
 void EXTI4_15_IRQHandler(void) {
   if(EXTI -> PR & EXTI_PR_PR9) {
     EXTI -> PR |= EXTI_PR_PR9;
-    //button9_pressed = 1;
+    button9_pressed = 1;
   }
 
   if(EXTI -> PR & EXTI_PR_PR10) {
     EXTI -> PR |= EXTI_PR_PR10;
-    //button10_pressed = 1;
+    button10_pressed = 1;
   }
 }
