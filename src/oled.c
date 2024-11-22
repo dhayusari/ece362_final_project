@@ -11,6 +11,8 @@
 #include "led.h"
 #include "alarm.h"
 #include <string.h>
+#include "lcd.h"
+#include "tft.h"
 
 uint8_t col; // the column being scanned
 uint8_t hist[16];
@@ -136,18 +138,16 @@ void clear_display(void) {
     nano_wait(2000000); // Wait for the clear command to complete
 }
 
-void oled_main_startingmsg(void){
-    clear_display();
-    spi2_display1("Welcome");
-    nano_wait(2000000);
-    clear_display();
-    spi2_display1("Play Game To");
-    spi2_display2("Get Passcode");
-}
-
 int oled_checkpasscode(void) {
     clear_display();
     spi2_display1("Enter passcode:");
+    
+    LCD_Clear(0x0000);
+    LCD_DrawLine(0, 13, 200, 13, 0xFFFF);
+    LCD_DrawString(15, 15, 0xFFFF, 0xFFFF, "Enter", 16, 1);
+    LCD_DrawString(65, 15, 0xFFFF, 0xFFFF, "Passcode:", 16, 1);
+    LCD_DrawLine(0, 35, 200, 35, 0xFFFF);
+
 
     int attempts = 0; //counter
     #define MAX_ATTEMPTS 3 //after max reached exit to alarm

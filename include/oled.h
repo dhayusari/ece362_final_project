@@ -1,7 +1,6 @@
 #ifndef __OLED_H__
 #define __OLED_H__
 
-void oled_main_startingmsg(void);
 void init_tim7();
 void TIM7_IRQHandler();
 void init_spi2();

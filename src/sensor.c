@@ -5,13 +5,15 @@
 #include "oled.h"
 #include "sensor.h"
 #include "alarm.h"
+#include "lcd.h"
+#include "tft.h"
 
 void internal_clock();
 
 uint8_t hist_sensor; // 8 sample bits of input
 int motion_cnt = 0;
 int no_motion_ct = 0;
-extern volatile int motion = 0;
+int motion = 0;
 int state[2] = {0, 0};
 int condition = 100;
 
@@ -37,7 +39,7 @@ void disable_sensor(){
 void read_motion() {
     // char key = get_keypress();
     if (motion > 0) {
-        condition = 50;
+        condition = 100;
     }
     if (hist_sensor & 0xFF) {  // Check if the latest bit indicates motion
         motion_cnt++;
@@ -67,7 +69,13 @@ void update_display() {
                 TIM6 ->CR1 &= ~(TIM_CR1_CEN);
                 clear_display();
                 spi2_display1("Motion Detected!");
+
+                LCD_DrawLine(0, 42, 200, 42, 0xFF00);
+                LCD_DrawString(15, 45, 0xFFFF, 0xFFFF, "Motion Detected!!", 16, 1);
+                LCD_DrawLine(0, 67, 200, 67, 0xFF00);
+
                 nano_wait(2000000000);
+                //countdown();
                 alarm();
 
             }
