@@ -30,6 +30,8 @@ int main(){
     int password;
     led_main(system_state);
     // clear_display();
+    enable_sensor();
+    init_tim6();
     init_tim7();
     init_spi2();
     spi2_init_oled();
@@ -48,19 +50,33 @@ int main(){
                 system_state = 2;
                 countdown();
                 clear_display();
-                enable_sensor();
                 spi2_display1("Detecting Motion"); 
 
                 LCD_DrawLine(0, 28, 200, 28, 0xFFFF);
                 LCD_DrawString(15, 30, 0xFFFF, 0xFFFF, "Detecting Motion", 16, 1);
                 LCD_DrawLine(0, 42, 200, 42, 0xFFFF);
 
-                init_tim6();
 
                 LCD_Clear(0xFFFF);
-                LCD_DrawString(85, 215, 0xFFFF, 0x0000, "DETECTING", 16, 1);
-                LCD_DrawString(85, 215, 0xFFFF, 0x0000, "MOTION", 16, 1);
+                LCD_DrawString(85, 215, 0xFFFF, 0x0000, "DETECTING MOTION", 16, 1);
 
+                if (motion_detected == 1) {
+                    TIM6 ->CR1 &= ~(TIM_CR1_CEN);
+                    clear_display();
+                    spi2_display1("Motion Detected!");
+
+                    LCD_DrawLine(0, 42, 200, 42, 0xFF00);
+                    LCD_DrawString(15, 45, 0xFFFF, 0xFFFF, "Motion Detected!!", 16, 1);
+                    LCD_DrawLine(0, 67, 200, 67, 0xFF00);
+
+                    nano_wait(2000000000);
+                    //countdown();
+                    alarm();
+                } 
+                else if (motion_detected == 0) {
+                    LCD_Clear(0xFFFF);
+                    LCD_DrawString(85, 215, 0xFFFF, 0x0000, "NO MOTION", 16, 1);
+                }
                 //clear_display();
                 //spi2_display1("Detecting Motion"); 
             } 
@@ -83,11 +99,8 @@ int main(){
 
                 //LCD_Clear(0x77DD);
                 LCD_DrawLine(0, 58, 200, 58, 0x77DD);
-                LCD_DrawString(15, 60, 0xFFFF, 0xFFFF, "Disabled", 16, 1);
-                LCD_DrawString(75, 60, 0xFFFF, 0xFFFF, "Sensor!", 16, 1);
+                LCD_DrawString(15, 60, 0xFFFF, 0xFFFF, "Disabled Sensor!", 16, 1);
                 LCD_DrawLine(0, 72, 200, 72, 0x77DD);
-
-
             } 
         }
     }
