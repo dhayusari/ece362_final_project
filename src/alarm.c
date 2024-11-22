@@ -16,9 +16,9 @@ void alarm(void){
     clear_display();
     spi2_display1("ALARMMM");
     GPIOA -> BSRR |= GPIO_BSRR_BS_3;
+    TIM6 -> CR1 &= ~(TIM_CR1_CEN);
     //led_main(3);
     nano_wait(5000000000);
-    // GPIOA -> BSRR |= GPIO_BSRR_BR_3;
 }
 
 void disable_alarm(void) {
