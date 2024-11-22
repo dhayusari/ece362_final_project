@@ -85,6 +85,7 @@ void update_display() {
                 nano_wait(2000000000);
                 //countdown();
                 alarm();
+            }
 
             LCD_Clear(0xFFFF);
             LCD_DrawString(85, 215, 0xFFFF, 0x0000, "MOTION", 16, 1);
