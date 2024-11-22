@@ -63,6 +63,14 @@ void read_motion() {
 }
 
 void update_display() {
+    if (state[0] == 0) {
+        // clear_display();
+        // spi2_display1("No Motion!");
+
+        LCD_Clear(0xFFFF);
+        LCD_DrawString(85, 215, 0xFFFF, 0x0000, "NO", 16, 1);
+        LCD_DrawString(85, 215, 0xFFFF, 0x0000, "MOTION", 16, 1);
+    }
     if (state[0] != state[1]) {
         if (state[1] == 1) {
             if (motion > 8) {
@@ -78,10 +86,9 @@ void update_display() {
                 //countdown();
                 alarm();
 
-            }
-            else {
-                motion++;
-            }
+            LCD_Clear(0xFFFF);
+            LCD_DrawString(85, 215, 0xFFFF, 0x0000, "MOTION", 16, 1);
+            LCD_DrawString(85, 215, 0xFFFF, 0x0000, "DETECTED", 16, 1);        
         }
     }
 }

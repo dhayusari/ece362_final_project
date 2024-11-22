@@ -29,6 +29,11 @@ int main(){
     int system_state = 0;
     int password;
     led_main(system_state);
+    // clear_display();
+    init_tim7();
+    init_spi2();
+    spi2_init_oled();
+
     clear_display();
     spi2_display1("Press Left Btn"); 
     spi2_display2("to Enable");
@@ -51,6 +56,13 @@ int main(){
                 LCD_DrawLine(0, 42, 200, 42, 0xFFFF);
 
                 init_tim6();
+
+                LCD_Clear(0xFFFF);
+                LCD_DrawString(85, 215, 0xFFFF, 0x0000, "DETECTING", 16, 1);
+                LCD_DrawString(85, 215, 0xFFFF, 0x0000, "MOTION", 16, 1);
+
+                //clear_display();
+                //spi2_display1("Detecting Motion"); 
             } 
             else {
                 system_state = 3;
