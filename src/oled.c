@@ -107,11 +107,13 @@ void append_digit(char digit) {
 
 int check_passcode() {
     if (strcmp(entered_digits, predefined_passcode) == 0){
+        clear_display();
         spi2_display2("MATCHED!");
         reset_passcode_entry();
         return 1;
     }
     else{
+        clear_display();
         spi2_display2("INCORRECT");
         return 0;
     }

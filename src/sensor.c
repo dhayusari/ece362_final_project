@@ -11,8 +11,9 @@ void internal_clock();
 uint8_t hist_sensor; // 8 sample bits of input
 int motion_cnt = 0;
 int no_motion_ct = 0;
-int motion = 1;
+extern volatile int motion = 0;
 int state[2] = {0, 0};
+int condition = 100;
 
 void enable_sensor_ports(){
     // RCC for GPIOA
@@ -35,10 +36,13 @@ void disable_sensor(){
 
 void read_motion() {
     // char key = get_keypress();
+    if (motion > 0) {
+        condition = 50;
+    }
     if (hist_sensor & 0xFF) {  // Check if the latest bit indicates motion
         motion_cnt++;
         no_motion_ct = 0;  // Reset no motion counter
-        if (motion_cnt >= 10) {  // Threshold for alarm
+        if (motion_cnt >= condition) {  // Threshold for alarm
             motion_cnt = 0;  // Reset motion counter
             state[0] = state[1];
             state[1] = 1;
@@ -94,7 +98,7 @@ void TIM6_DAC_IRQHandler() {
 void init_tim6(void) {
     RCC->APB1ENR |= RCC_APB1ENR_TIM6EN;  // Enable TIM6 clock
     TIM6->PSC = 4800 - 1;  // Prescaler for 10ms
-    TIM6->ARR = 100 - 1;  // Auto-reload value
+    TIM6->ARR = 100- 1;  // Auto-reload value
     TIM6->DIER |= TIM_DIER_UIE;  // Enable update interrupt
     NVIC->ISER[0] = (1 << TIM6_DAC_IRQn);  // Enable TIM6 IRQ in NVIC
     TIM6->CR1 |= TIM_CR1_CEN;  // Start TIM6

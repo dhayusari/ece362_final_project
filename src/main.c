@@ -1,6 +1,7 @@
 // MAIN TO CALL FUNCTIONS
 #include "stm32f0xx.h"
 #include <stdint.h>
+#include <stdio.h>
 #include "oled.h"
 #include "keypad.h"
 #include "alarm.h"
@@ -11,6 +12,7 @@
 #include "lcd.h"
 
 void internal_clock();
+void countdown();
 
 const uint16_t image_shriya[] = {
 0x9CD2, 0x6AC9, 0x72EA, 0x730B, 0x730B, 0x730B, 0x732B, 0x730B, 0x72EB, 0x72EB, 
@@ -15387,19 +15389,21 @@ const Picture image = {
 
 int main(){
     internal_clock();
-    
+    //enabling ports and initialization
+    enable_sensor_ports();
+    enable_keypad_ports();
+    enable_alarm_ports();
+    button_init();
+    led_init();
+    init_tim7();
+    init_spi2();
+    spi2_init_oled();
     LCD_Setup();
+    
     LCD_DrawPicture(0, 0, &image);
     LCD_DrawString(85, 215, 0xFFFF, 0x0000, "GET", 16, 1);
     LCD_DrawString(115, 215, 0xFFFF, 0x0000, "OUT!!", 16, 1);
 
-    //enabling ports
-    enable_sensor_ports();
-    enable_keypad_ports();
-    enable_alarm_ports();
-    //initialize button
-    button_init();
-    led_init();
 
     int system_state = 0;
     int password;
@@ -15422,6 +15426,8 @@ int main(){
                 system_state = 1;
                 led_main(system_state);
                 system_state = 2;
+                countdown();
+                clear_display();
                 enable_sensor();
                 init_tim6();
 
@@ -15434,7 +15440,7 @@ int main(){
             } 
             else {
                 system_state = 3;
-                led_main(system_state);
+                // led_main(system_state);
                 alarm();
             }
         }
@@ -15458,3 +15464,16 @@ int main(){
     
 }
 
+void countdown() {
+    int i = 15;
+    char str[2];
+    clear_display();
+    while (i >= 0) {
+        sprintf(str, "%d", i);
+        spi2_display1("Countdown"); 
+        spi2_display2(str);
+        nano_wait(1000000000);
+        clear_display();
+        i--;
+    }
+}
