@@ -35,6 +35,6 @@ void EXTI4_15_IRQHandler(void) {
   if(EXTI -> PR & EXTI_PR_PR10) {
     EXTI -> PR |= EXTI_PR_PR10;
     button10_pressed = 1;
-    TIM6 -> CR1 &= ~(TIM_CR1_CEN);
+    
   }
 }
