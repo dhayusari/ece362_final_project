@@ -49,17 +49,11 @@ int main(){
                 countdown();
                 clear_display();
                 enable_sensor();
-                spi2_display1("Detecting Motion"); 
+                //spi2_display1("Detecting Motion");
 
-                LCD_DrawLine(0, 28, 200, 28, 0xFFFF);
-                LCD_DrawString(15, 30, 0xFFFF, 0xFFFF, "Detecting Motion", 16, 1);
-                LCD_DrawLine(0, 42, 200, 42, 0xFFFF);
+                LCD_DrawString(15, 35, 0xFFFF, 0xFFFF, "Detecting Motion", 16, 1);
 
                 init_tim6();
-
-                LCD_Clear(0xFFFF);
-                LCD_DrawString(85, 215, 0xFFFF, 0x0000, "DETECTING", 16, 1);
-                LCD_DrawString(85, 215, 0xFFFF, 0x0000, "MOTION", 16, 1);
 
                 //clear_display();
                 //spi2_display1("Detecting Motion"); 
@@ -79,15 +73,10 @@ int main(){
                 disable_sensor();
                 disable_alarm();
                 clear_display();
-                spi2_display1("Disabled Sensor");
+                //spi2_display1("Disabled Sensor");
 
                 //LCD_Clear(0x77DD);
-                LCD_DrawLine(0, 58, 200, 58, 0x77DD);
-                LCD_DrawString(15, 60, 0xFFFF, 0xFFFF, "Disabled", 16, 1);
-                LCD_DrawString(75, 60, 0xFFFF, 0xFFFF, "Sensor!", 16, 1);
-                LCD_DrawLine(0, 72, 200, 72, 0x77DD);
-
-
+                LCD_DrawString(15, 60, 0xFFFF, 0xFFFF, "Disabled Sensor", 16, 1);
             } 
         }
     }
