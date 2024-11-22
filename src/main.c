@@ -44,7 +44,7 @@ int main(){
             password = oled_checkpasscode();
             if (password) {
                 system_state = 1;
-                led_main(system_state);
+                green();
                 system_state = 2;
                 countdown();
                 clear_display();
@@ -57,6 +57,7 @@ int main(){
 
                 init_tim6();
 
+                white_pulse();
                 LCD_Clear(0xFFFF);
                 LCD_DrawString(85, 215, 0xFFFF, 0x0000, "DETECTING", 16, 1);
                 LCD_DrawString(85, 215, 0xFFFF, 0x0000, "MOTION", 16, 1);
@@ -66,11 +67,11 @@ int main(){
             } 
             else {
                 system_state = 3;
-                // led_main(system_state);
+                led_main(system_state);
                 alarm();
             }
         }
-        if(button10_pressed && system_state) { //Check to make sure the system is on in order for this button to work
+        else if(button10_pressed && system_state) { //Check to make sure the system is on in order for this button to work
             button10_pressed = 0;
             password = oled_checkpasscode();
             if (password) {
@@ -86,8 +87,6 @@ int main(){
                 LCD_DrawString(15, 60, 0xFFFF, 0xFFFF, "Disabled", 16, 1);
                 LCD_DrawString(75, 60, 0xFFFF, 0xFFFF, "Sensor!", 16, 1);
                 LCD_DrawLine(0, 72, 200, 72, 0x77DD);
-
-
             } 
         }
     }

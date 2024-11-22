@@ -116,7 +116,7 @@ int check_passcode() {
     }
     else{
         clear_display();
-        spi2_display2("INCORRECT");
+        spi2_display1("INCORRECT");
         return 0;
     }
 }

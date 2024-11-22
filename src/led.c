@@ -40,29 +40,26 @@ void led_off(void) {
     set_color(999, 999, 999);
 }
 
-void white_pulse(int system_state) {
-    //Pulses LED in white color, showing that the security system is on and enabled
-    while(system_state == 2) {
-        for(uint32_t i = 0; i < 999; i += 100) {
-        set_color(i, i, i);
-        nano_wait(5000000);
-        }
-        for(uint32_t j = 999; j > 0; j -= 100) {
-            set_color(j, j, j);
-            nano_wait(5000000);
-        }
-    }
+void white_pulse(void) {
+    set_color(1, 1, 1);
 }
 
 void red_flash(void) {
     //Security system is triggered, curr_state is set to 1 and flashes red until
     //security is disabled, sending curr_state to 0 ending flashing
-    while(1) {
+    uint64_t initial_delay1 = 1000000000;  
+    int flashes = 20; // Choose a number of flashes for smooth transition
+    uint64_t current_delay1 = initial_delay1;
+
+    for (int i = 0; i < flashes; i++) {
+        // Turn the LED ON
         set_color(1, 999, 999);
-        nano_wait(10000000);
-        set_color(999, 999, 999);
-        nano_wait(10000000);
+        nano_wait(current_delay1);
+        led_off();       
+        nano_wait(current_delay1);
     }
+
+    set_color(1, 999, 999);
 }
 
 void green(void) {
@@ -71,28 +68,24 @@ void green(void) {
 
 void green_flash(void)
 {
-    uint32_t initial_delay = 50000000;  // Initial delay in nanoseconds (500ms)
-    uint32_t final_delay = 5000000;   // Final delay in nanoseconds (100ms)
-    uint32_t step; // Step to reduce delay
+    uint64_t initial_delay = 4500000000;  
+    uint64_t step; // Step to reduce delay
 
     int flashes = 15; // Choose a number of flashes for smooth transition
-    step = (initial_delay - final_delay) / flashes;
+    step = 500000000;
 
-    uint32_t current_delay = initial_delay;
+    uint64_t current_delay = initial_delay;
 
     for (int i = 0; i < flashes; i++) {
         // Turn the LED ON
         green();
         nano_wait(current_delay);
-        led_off();       
+        green();       
         nano_wait(current_delay);   
 
-        // Decrease the delay for the next iteration
-        if (current_delay > final_delay) {
-            current_delay -= step;
-        }
+        current_delay = current_delay - step;
     }
-    green(); //After 15 seconds, light will become solid state of green to show security system is now set
+    white_pulse(); //After 15 seconds, light will become solid state of green to show security system is now set
 }
 
 void led_main(int system_state) {
@@ -103,17 +96,14 @@ void led_main(int system_state) {
     }
     else if(system_state == 1) //passcode correctly input, light flashes to show user security will turn on shortly
     {
-        led_off();
         green_flash();
     }  
     else if(system_state == 2) //security system on
     {   
-        led_off();
-        white_pulse(system_state);
+        white_pulse();
     }
     else if(system_state == 3) //security system triggered
     {
-        led_off();
         red_flash();
     }
 }
