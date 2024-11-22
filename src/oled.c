@@ -144,7 +144,11 @@ void oled_main_startingmsg(void){
 }
 
 int oled_checkpasscode(void) {
-    spi2_display1("Enter passcode:");
+    //spi2_display1("Enter passcode:");
+    
+    LCD_Clear(0xFFFF);
+    LCD_DrawString(85, 215, 0xFFFF, 0x0000, "Enter", 16, 1);
+    LCD_DrawString(85, 215, 0xFFFF, 0x0000, "Passcode:", 16, 1);
 
     int attempts = 0; //counter
     #define MAX_ATTEMPTS 3 //after max reached exit to alarm
@@ -162,8 +166,11 @@ int oled_checkpasscode(void) {
                 return 1;
             }
             else{
-                clear_display();
-                spi2_display1("Re-Enter Code");
+                // clear_display();
+                // spi2_display1("Re-Enter Code");
+                LCD_Clear(0xFFFF);
+                LCD_DrawString(85, 215, 0xFFFF, 0x0000, "Re-Enter", 16, 1);
+                LCD_DrawString(85, 215, 0xFFFF, 0x0000, "Code:", 16, 1);
                 attempts++;
             }
             digit_index = 0;

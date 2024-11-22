@@ -15408,8 +15408,11 @@ int main(){
     init_tim7();
     init_spi2();
     spi2_init_oled();
+
     clear_display();
     spi2_display1("Press to Enable"); 
+
+
     // keypad();
     while(1) {
         if(button9_pressed) {
@@ -15421,8 +15424,13 @@ int main(){
                 system_state = 2;
                 enable_sensor();
                 init_tim6();
-                clear_display();
-                spi2_display1("Detecting Motion"); 
+
+                LCD_Clear(0xFFFF);
+                LCD_DrawString(85, 215, 0xFFFF, 0x0000, "DETECTING", 16, 1);
+                LCD_DrawString(85, 215, 0xFFFF, 0x0000, "MOTION", 16, 1);
+
+                //clear_display();
+                //spi2_display1("Detecting Motion"); 
             } 
             else {
                 system_state = 3;
@@ -15437,8 +15445,13 @@ int main(){
                 system_state = 0;
                 led_main(system_state);
                 disable_sensor();
-                clear_display();
-                spi2_display1("Disabled Sensor"); 
+
+                LCD_Clear(0xFFFF);
+                LCD_DrawString(85, 215, 0xFFFF, 0x0000, "DISABLED", 16, 1);
+                LCD_DrawString(85, 215, 0xFFFF, 0x0000, "SENSOR", 16, 1);
+
+                //clear_display();
+                //spi2_display1("Disabled Sensor"); 
             } 
         }
     }
