@@ -40,29 +40,25 @@ void led_off(void) {
     set_color(999, 999, 999);
 }
 
-void white_pulse(int system_state) {
-    //Pulses LED in white color, showing that the security system is on and enabled
-    while(system_state == 2) {
-        for(uint32_t i = 0; i < 999; i += 100) {
-        set_color(i, i, i);
-        nano_wait(5000000);
-        }
-        for(uint32_t j = 999; j > 0; j -= 100) {
-            set_color(j, j, j);
-            nano_wait(5000000);
-        }
-    }
+void white_pulse() {
+    set_color(1, 1, 1);
+    // //Pulses LED in white color, showing that the security system is on and enabled
+    // while(system_state == 2) {
+    //     for(uint32_t i = 0; i < 999; i += 100) {
+    //     set_color(i, i, i);
+    //     nano_wait(5000000);
+    //     }
+    //     for(uint32_t j = 999; j > 0; j -= 100) {
+    //         set_color(j, j, j);
+    //         nano_wait(5000000);
+    //     }
+    // }
 }
 
 void red_flash(void) {
     //Security system is triggered, curr_state is set to 1 and flashes red until
     //security is disabled, sending curr_state to 0 ending flashing
-    while(1) {
-        set_color(1, 999, 999);
-        nano_wait(10000000);
-        set_color(999, 999, 999);
-        nano_wait(10000000);
-    }
+    set_color(1, 999, 999);
 }
 
 void green(void) {
@@ -109,7 +105,7 @@ void led_main(int system_state) {
     else if(system_state == 2) //security system on
     {   
         led_off();
-        white_pulse(system_state);
+        white_pulse();
     }
     else if(system_state == 3) //security system triggered
     {

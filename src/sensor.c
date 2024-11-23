@@ -5,8 +5,8 @@
 #include "oled.h"
 #include "sensor.h"
 #include "alarm.h"
-#include "lcd.h"
 #include "tft.h"
+#include "lcd.h"
 
 void internal_clock();
 
@@ -34,12 +34,14 @@ void enable_sensor(){
 void disable_sensor(){
     //turning off PA6
     GPIOA -> BRR |= GPIO_BRR_BR_6;
+
+    LCD_DrawString(2, 65, 0xFFFF, 0xFFFF, "Sensor Disabled.", 16, 1);
 }
 
 void read_motion() {
     // char key = get_keypress();
     if (motion > 0) {
-        condition = 100;
+        condition = 50;
     }
     if (hist_sensor & 0xFF) {  // Check if the latest bit indicates motion
         motion_cnt++;
@@ -66,11 +68,18 @@ void update_display() {
     if (state[0] != state[1]) {
         if (state[1] == 1) {
             if (motion > 8) {
-                motion_detected = 1;
-            }     
-        }
-        else {
-            motion_detected = 0;
+                TIM6 ->CR1 &= ~(TIM_CR1_CEN);
+                // clear_display();
+                // spi2_display1("Motion Detected!");
+                LCD_DrawString(2, 45, 0xFFFF, 0xFFFF, "Motion Detected!!", 16, 1);
+                nano_wait(2000000000);
+
+                alarm();
+
+            }
+            else {
+                motion++;
+            }
         }
     }
 }

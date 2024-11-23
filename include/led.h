@@ -7,7 +7,7 @@
 void led_init(void);
 void set_color(uint32_t red, uint32_t green, uint32_t blue);
 void led_off(void);
-void white_pulse(int system_state);
+void white_pulse();
 void red_flash(void);
 void green(void);
 void green_flash(void);

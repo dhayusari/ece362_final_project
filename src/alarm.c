@@ -1,12 +1,10 @@
 // ALARM FUNCTIONS
 #include "stm32f0xx.h"
-#include <stdio.h>
 #include "oled.h"
 #include "alarm.h"
 #include "led.h"
-#include "lcd.h"
 #include "tft.h"
-#include "button.h"
+#include "lcd.h"
 
 const uint16_t image_shriya[] = {
 0x9CD2, 0x6AC9, 0x72EA, 0x730B, 0x730B, 0x730B, 0x732B, 0x730B, 0x72EB, 0x72EB, 
@@ -15378,7 +15376,7 @@ const Picture image = {
   .width = 240,
   .height = 320,
   .bytes_per_pixel = 2,
-  .pixel_data = image_eric
+  .pixel_data = image_shriya
 };
 
 void enable_alarm_ports(){
@@ -15390,47 +15388,22 @@ void enable_alarm_ports(){
 };
 
 void alarm(void){
-    clear_display();
+    // clear_display();
+    // spi2_display1("ALARMMM");
+
     GPIOA -> BSRR |= GPIO_BSRR_BS_3;
-    TIM6 -> CR1 &= ~(TIM_CR1_CEN); //
 
+    red_flash();
     LCD_DrawPicture(0, 0, &image);
-    LCD_DrawString(85, 215, 0xFFFF, 0x0000, "GET OUT!!!!!", 16, 1);
-   // LCD_DrawString(115, 215, 0xFFFF, 0x0000, "OUT!!", 16, 1);
+    LCD_DrawString(85, 215, 0xFFFF, 0x0000, "GET OUT!", 16, 1);
 
-    spi2_display1("ALARMMM");
-    if(button10_pressed) {
-        return;
-    }
     //led_main(3);
-    // nano_wait(5000000000);
+    nano_wait(200000000);
+    // GPIOA -> BSRR |= GPIO_BSRR_BR_3;
 }
 
 void disable_alarm(void) {
     GPIOA -> BSRR |= GPIO_BSRR_BR_3;
+    LCD_Clear(0x0000);
     //led_main(0);
-}
-
-void countdown() {
-    int i = 15;
-    char str[2];
-    clear_display();
-    while (i >= 0) {
-        sprintf(str, "%d", i);
-        spi2_display1("Countdown"); 
-        spi2_display2(str);
-        nano_wait(1000000000);
-        clear_display();
-        i--;
-        if (button10_pressed) {
-            return;
-        }
-    }
-
-
-    // LCD_DrawLine(0, 28, 200, 28, 0xFFFF);
-    // LCD_DrawString(15, 30, 0xFFFF, 0xFFFF, "LEAVE", 16, 1);
-    // LCD_DrawString(90, 30, 0xFFFF, 0xFFFF, "ROOM", 16, 1);
-    // LCD_DrawString(120, 30, 0xFFFF, 0xFFFF, "NOW!", 16, 1);
-    // LCD_DrawLine(0, 42, 200, 42, 0xFFFF);
 }

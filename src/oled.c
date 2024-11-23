@@ -11,8 +11,8 @@
 #include "led.h"
 #include "alarm.h"
 #include <string.h>
-#include "lcd.h"
 #include "tft.h"
+#include "lcd.h"
 
 uint8_t col; // the column being scanned
 uint8_t hist[16];
@@ -109,14 +109,20 @@ void append_digit(char digit) {
 
 int check_passcode() {
     if (strcmp(entered_digits, predefined_passcode) == 0){
-        clear_display();
-        spi2_display2("MATCHED!");
+        // clear_display();
+        // spi2_display2("MATCHED!");
+
+        LCD_DrawString(2, 5, 0xFFFF, 0xFFFF, "MATCHED!", 16, 1);
+
         reset_passcode_entry();
         return 1;
     }
     else{
-        clear_display();
-        spi2_display2("INCORRECT");
+        // clear_display();
+        // spi2_display2("INCORRECT");
+
+        LCD_DrawString(2, 5, 0xFFFF, 0xFFFF, "INCORRECT", 16, 1);
+
         return 0;
     }
 }
@@ -138,16 +144,18 @@ void clear_display(void) {
     nano_wait(2000000); // Wait for the clear command to complete
 }
 
+void oled_main_startingmsg(void){
+    clear_display();
+    spi2_display1("Welcome");
+    nano_wait(2000000);
+    clear_display();
+    spi2_display1("Play Game To");
+    spi2_display2("Get Passcode");
+}
+
 int oled_checkpasscode(void) {
     clear_display();
     spi2_display1("Enter passcode:");
-    
-    LCD_Clear(0x0000);
-    LCD_DrawLine(0, 13, 200, 13, 0xFFFF);
-    LCD_DrawString(15, 15, 0xFFFF, 0xFFFF, "Enter", 16, 1);
-    LCD_DrawString(65, 15, 0xFFFF, 0xFFFF, "Passcode:", 16, 1);
-    LCD_DrawLine(0, 35, 200, 35, 0xFFFF);
-
 
     int attempts = 0; //counter
     #define MAX_ATTEMPTS 3 //after max reached exit to alarm
@@ -165,11 +173,9 @@ int oled_checkpasscode(void) {
                 return 1;
             }
             else{
-                // clear_display();
-                // spi2_display1("Re-Enter Code");
-                LCD_Clear(0xFFFF);
-                LCD_DrawString(85, 215, 0xFFFF, 0x0000, "Re-Enter Code", 16, 1);
-                LCD_DrawString(85, 215, 0xFFFF, 0x0000, "Code:", 16, 1);
+                clear_display();
+                spi2_display1("Re-Enter Code");
+
                 attempts++;
             }
             digit_index = 0;

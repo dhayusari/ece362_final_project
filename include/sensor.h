@@ -9,5 +9,4 @@ void disable_sensor();
 void TIM6_DAC_IRQHandler();
 void update_hist_sensor();
 
-volatile int motion_detected = 0;
 #endif /* __SENSOR_H__ */
